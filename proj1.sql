@@ -99,3 +99,19 @@ join PortfolioProj1..vaccine$ vac
    on dea.location = vac.location
    and dea.date = vac.date
 where dea.continent is not null
+
+
+-- total deaths by continents
+select location, SUM(cast(new_deaths as int)) as TotalDeathCount
+from PortfolioProj1..['covid death$']
+where continent is null
+and location in ('Asia', 'Europe', 'North America', 'South America', 'Africa', 'Oceania')
+Group by location
+order by TotalDeathCount desc
+
+
+-- Percentage of population Infected
+select location, population, date, MAX (total_cases) as HighestInfections, MAX((total_cases/population))*100 as PercentPopulationInfected
+from PortfolioProj1..['covid death$']
+group by location, population, date
+order by PercentPopulationInfected desc
